@@ -1,6 +1,74 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Mail, ExternalLink, Code2, Server, Database, Terminal, ArrowRight } from 'lucide-react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaReact, FaHtml5, FaCss3Alt, FaNodeJs, FaGitAlt, FaDocker, FaDesktop, FaServer, FaPython } from 'react-icons/fa';
+import { SiNextdotjs, SiExpress, SiMongodb, SiTypescript, SiPostman, SiJavascript, SiJsonwebtokens, SiPrisma, SiPostgresql } from 'react-icons/si';
+import { motion } from 'framer-motion';
+import Background3D from './components/Background3D';
+
+function CustomCursor() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const mouseMove = (e) => {
+      setMousePosition({
+        x: e.clientX,
+        y: e.clientY
+      });
+    };
+
+    const handleMouseOver = (e) => {
+      if (
+        e.target.tagName === 'A' || 
+        e.target.tagName === 'BUTTON' || 
+        e.target.closest('a') || 
+        e.target.closest('button') ||
+        e.target.classList.contains('project-card') ||
+        e.target.classList.contains('skill-category')
+      ) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
+
+    window.addEventListener("mousemove", mouseMove);
+    window.addEventListener("mouseover", handleMouseOver);
+
+    return () => {
+      window.removeEventListener("mousemove", mouseMove);
+      window.removeEventListener("mouseover", handleMouseOver);
+    };
+  }, []);
+
+  const variants = {
+    default: {
+      x: mousePosition.x - 16,
+      y: mousePosition.y - 16,
+      scale: 1,
+      opacity: 1,
+      transition: { type: "tween", ease: "backOut", duration: 0.15 }
+    },
+    hover: {
+      x: mousePosition.x - 24,
+      y: mousePosition.y - 24,
+      scale: 1.5,
+      backgroundColor: "rgba(99, 102, 241, 0.3)",
+      borderColor: "transparent",
+      opacity: 0.8,
+      mixBlendMode: "screen",
+      transition: { type: "tween", ease: "backOut", duration: 0.15 }
+    }
+  };
+
+  return (
+    <motion.div
+      className="custom-cursor"
+      variants={variants}
+      animate={isHovering ? "hover" : "default"}
+    />
+  );
+}
 
 function App() {
   const scrollTo = (id) => {
@@ -10,8 +78,26 @@ function App() {
     }
   };
 
+  const fadeUpVariant = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
   return (
     <>
+      <Background3D />
+      <CustomCursor />
+      
       <nav>
         <div className="container nav-content">
           <a href="#" className="logo">Chinmay<span>.</span></a>
@@ -28,96 +114,135 @@ function App() {
         {/* Hero Section */}
         <section className="hero" id="about">
           <div className="container">
-            <div className="hero-content fade-in-up">
-              <span className="hero-greeting">Hello World, I'm</span>
+            <motion.div 
+              className="hero-content"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeUpVariant}
+            >
+              <span className="hero-greeting">Hello I'm</span>
               <h1 className="hero-title">Chinmay Dhaundiyal</h1>
               <h2 className="hero-subtitle">Fullstack Web Developer</h2>
               <p className="hero-desc">
                 I build exceptional and accessible digital experiences for the web. 
                 Passionate about creating modern, responsive, and dynamic web applications from front to back.
               </p>
-              <div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ display: 'inline-block' }}>
                 <a onClick={() => scrollTo('projects')} className="btn btn-primary">
                   View My Work <ArrowRight size={20} />
                 </a>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ display: 'inline-block' }}>
                 <a onClick={() => scrollTo('contact')} className="btn btn-outline">
                   Contact Me
                 </a>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
         {/* Skills Section */}
         <section id="skills">
           <div className="container">
-            <h2 className="section-title fade-in-up">My Tech Stack</h2>
-            <div className="skills-grid">
+            <motion.h2 
+              className="section-title"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.8 }}
+              variants={fadeUpVariant}
+            >
+              My Tech Stack
+            </motion.h2>
+            <motion.div 
+              className="skills-grid"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+            >
               
-              <div className="skill-category fade-in-up delay-1">
+              <motion.div className="skill-category" variants={fadeUpVariant} whileHover={{ y: -10, borderColor: "rgba(99, 102, 241, 0.5)", transition: { duration: 0.3 } }}>
                 <div className="category-header">
                   <Code2 size={24} />
                   <h3>Frontend</h3>
                 </div>
                 <div className="skill-list">
-                  <span className="skill-tag">React.js</span>
-                  <span className="skill-tag">Next.js</span>
-                  <span className="skill-tag">HTML5</span>
-                  <span className="skill-tag">CSS3</span>
-                  <span className="skill-tag">Responsive Design</span>
+                  <div className="skill-item"><FaReact className="skill-icon" /><span className="skill-name">React.js</span></div>
+                  <div className="skill-item"><SiNextdotjs className="skill-icon" /><span className="skill-name">Next.js</span></div>
+                  <div className="skill-item"><FaHtml5 className="skill-icon" /><span className="skill-name">HTML5</span></div>
+                  <div className="skill-item"><FaCss3Alt className="skill-icon" /><span className="skill-name">CSS3</span></div>
+                  <div className="skill-item"><FaDesktop className="skill-icon" /><span className="skill-name">Responsive</span></div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="skill-category fade-in-up delay-2">
+              <motion.div className="skill-category" variants={fadeUpVariant} whileHover={{ y: -10, borderColor: "rgba(99, 102, 241, 0.5)", transition: { duration: 0.3 } }}>
                 <div className="category-header">
                   <Server size={24} />
                   <h3>Backend</h3>
                 </div>
                 <div className="skill-list">
-                  <span className="skill-tag">Node.js</span>
-                  <span className="skill-tag">Express.js</span>
-                  <span className="skill-tag">REST APIs</span>
-                  <span className="skill-tag">JWT Auth</span>
+                  <div className="skill-item"><FaNodeJs className="skill-icon" /><span className="skill-name">Node.js</span></div>
+                  <div className="skill-item"><SiExpress className="skill-icon" /><span className="skill-name">Express.js</span></div>
+                  <div className="skill-item"><FaServer className="skill-icon" /><span className="skill-name">REST APIs</span></div>
+                  <div className="skill-item"><SiJsonwebtokens className="skill-icon" /><span className="skill-name">JWT Auth</span></div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="skill-category fade-in-up delay-3">
+              <motion.div className="skill-category" variants={fadeUpVariant} whileHover={{ y: -10, borderColor: "rgba(99, 102, 241, 0.5)", transition: { duration: 0.3 } }}>
                 <div className="category-header">
                   <Database size={24} />
                   <h3>Database & Languages</h3>
                 </div>
                 <div className="skill-list">
-                  <span className="skill-tag">MongoDB</span>
-                  <span className="skill-tag">JavaScript</span>
-                  <span className="skill-tag">TypeScript</span>
+                  <div className="skill-item"><SiMongodb className="skill-icon" /><span className="skill-name">MongoDB</span></div>
+                  <div className="skill-item"><SiPostgresql className="skill-icon" /><span className="skill-name">PostgreSQL</span></div>
+                  <div className="skill-item"><SiPrisma className="skill-icon" /><span className="skill-name">Prisma</span></div>
+                  <div className="skill-item"><SiJavascript className="skill-icon" /><span className="skill-name">JavaScript</span></div>
+                  <div className="skill-item"><SiTypescript className="skill-icon" /><span className="skill-name">TypeScript</span></div>
+                  <div className="skill-item"><FaPython className="skill-icon" /><span className="skill-name">Python</span></div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="skill-category fade-in-up delay-3">
+              <motion.div className="skill-category" variants={fadeUpVariant} whileHover={{ y: -10, borderColor: "rgba(99, 102, 241, 0.5)", transition: { duration: 0.3 } }}>
                 <div className="category-header">
                   <Terminal size={24} />
                   <h3>Tools & Workflow</h3>
                 </div>
                 <div className="skill-list">
-                  <span className="skill-tag">Git</span>
-                  <span className="skill-tag">GitHub</span>
-                  <span className="skill-tag">Docker</span>
-                  <span className="skill-tag">Postman</span>
+                  <div className="skill-item"><FaGitAlt className="skill-icon" /><span className="skill-name">Git</span></div>
+                  <div className="skill-item"><FaGithub className="skill-icon" /><span className="skill-name">GitHub</span></div>
+                  <div className="skill-item"><FaDocker className="skill-icon" /><span className="skill-name">Docker</span></div>
+                  <div className="skill-item"><SiPostman className="skill-icon" /><span className="skill-name">Postman</span></div>
                 </div>
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Projects Section */}
         <section id="projects">
           <div className="container">
-            <h2 className="section-title fade-in-up">Featured Projects</h2>
-            <div className="projects-grid">
+            <motion.h2 
+              className="section-title"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.8 }}
+              variants={fadeUpVariant}
+            >
+              Featured Projects
+            </motion.h2>
+            <motion.div 
+              className="projects-grid"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+            >
               
               {/* Project 1 */}
-              <div className="project-card fade-in-up delay-1">
+              <motion.div className="project-card" variants={fadeUpVariant} whileHover={{ y: -15, scale: 1.02, transition: { duration: 0.4 } }}>
                 <div className="project-image" style={{backgroundImage: 'url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80")'}}>
                 </div>
                 <div className="project-content">
@@ -134,10 +259,10 @@ function App() {
                     <a href="https://study-notion-eight-gules.vercel.app/" target="_blank" rel="noopener noreferrer"><ExternalLink size={18} /> Live Demo</a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Project 2 */}
-              <div className="project-card fade-in-up delay-2">
+              <motion.div className="project-card" variants={fadeUpVariant} whileHover={{ y: -15, scale: 1.02, transition: { duration: 0.4 } }}>
                 <div className="project-image" style={{backgroundImage: 'url("https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80")'}}>
                 </div>
                 <div className="project-content">
@@ -153,10 +278,10 @@ function App() {
                     <a href="https://triplix.vercel.app/" target="_blank" rel="noopener noreferrer"><ExternalLink size={18} /> Live Demo</a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Project 3 */}
-              <div className="project-card fade-in-up delay-3">
+              <motion.div className="project-card" variants={fadeUpVariant} whileHover={{ y: -15, scale: 1.02, transition: { duration: 0.4 } }}>
                 <div className="project-image" style={{backgroundImage: 'url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80")'}}>
                 </div>
                 <div className="project-content">
@@ -173,30 +298,42 @@ function App() {
                     <a href="https://librixweb.vercel.app/" target="_blank" rel="noopener noreferrer"><ExternalLink size={18} /> Live Demo</a>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Contact Section */}
         <section id="contact">
           <div className="container">
-            <div className="contact-box fade-in-up">
+            <motion.div 
+              className="contact-box"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeUpVariant}
+            >
               <h2 className="section-title" style={{marginBottom: '1rem'}}>Get In Touch</h2>
               <p className="contact-desc">
                 I'm currently open for new opportunities. Whether you have a question, 
                 a project idea, or just want to say hi, my inbox is always open!
               </p>
-              <a href="mailto:hello@example.com" className="btn btn-primary" style={{padding: '1.2rem 3rem', fontSize: '1.2rem'}}>
-                Say Hello <Mail size={20} />
-              </a>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ display: 'inline-block' }}>
+                <a href="mailto:hello@example.com" className="btn btn-primary" style={{padding: '1.2rem 3rem', fontSize: '1.2rem'}}>
+                  Say Hello <Mail size={20} />
+                </a>
+              </motion.div>
               
               <div className="social-links">
-                <a href="https://github.com/chinmay21" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub size={24} /></a>
-                <a href="https://www.linkedin.com/in/chinmaydhaundiyal/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><FaLinkedin size={24} /></a>
+                <motion.a whileHover={{ y: -8, scale: 1.1, backgroundColor: "rgba(99, 102, 241, 0.2)" }} href="https://github.com/chinmay21" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                  <FaGithub size={24} />
+                </motion.a>
+                <motion.a whileHover={{ y: -8, scale: 1.1, backgroundColor: "rgba(99, 102, 241, 0.2)" }} href="https://www.linkedin.com/in/chinmaydhaundiyal/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <FaLinkedin size={24} />
+                </motion.a>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
       </main>
