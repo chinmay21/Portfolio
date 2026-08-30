@@ -320,7 +320,7 @@ function App() {
                 a project idea, or just want to say hi, my inbox is always open!
               </p>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} style={{ display: 'inline-block' }}>
-                <a href="mailto:hello@example.com" className="btn btn-primary" style={{padding: '1.2rem 3rem', fontSize: '1.2rem'}}>
+                <a href="mailto:dhaundiyalchinmay@gmail.com" className="btn btn-primary" style={{padding: '1.2rem 3rem', fontSize: '1.2rem'}}>
                   Say Hello <Mail size={20} />
                 </a>
               </motion.div>
